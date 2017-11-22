@@ -1,0 +1,7 @@
+C:\Users\Evgeni\Documents\Visual Studio 2017\Projects\AIAssignment5\AIAssignment5\bin\Debug\AIAssignment5.exe.config
+C:\Users\Evgeni\Documents\Visual Studio 2017\Projects\AIAssignment5\AIAssignment5\bin\Debug\AIAssignment5.exe
+C:\Users\Evgeni\Documents\Visual Studio 2017\Projects\AIAssignment5\AIAssignment5\bin\Debug\AIAssignment5.pdb
+C:\Users\Evgeni\Documents\Visual Studio 2017\Projects\AIAssignment5\AIAssignment5\obj\Debug\AIAssignment5.csprojResolveAssemblyReference.cache
+C:\Users\Evgeni\Documents\Visual Studio 2017\Projects\AIAssignment5\AIAssignment5\obj\Debug\AIAssignment5.csproj.CoreCompileInputs.cache
+C:\Users\Evgeni\Documents\Visual Studio 2017\Projects\AIAssignment5\AIAssignment5\obj\Debug\AIAssignment5.exe
+C:\Users\Evgeni\Documents\Visual Studio 2017\Projects\AIAssignment5\AIAssignment5\obj\Debug\AIAssignment5.pdb
