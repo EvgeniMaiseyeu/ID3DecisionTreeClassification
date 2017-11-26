@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AIAssignment5
+namespace ID3DecisionTreeClassification
 {
     class Individual
     {
@@ -35,9 +35,9 @@ namespace AIAssignment5
             this.name = splitString[0];
             this.value = splitString[1];
             attributes = new string[splitString.Length - 2];
-            for (int i = 2; i < attributes.Length; i++)
+            for (int i = 0; i < attributes.Length; i++)
             {
-                attributes[i] = splitString[i];
+                attributes[i] = splitString[i+2];
             }
         }
     }

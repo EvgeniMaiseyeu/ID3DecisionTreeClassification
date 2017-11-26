@@ -1,10 +1,11 @@
-﻿using System;
+﻿using ID3DecisionTreeClassification;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AIAssignment5
+namespace ID3DecisionTreeClassification
 {
     class Program
     {
@@ -20,11 +21,11 @@ namespace AIAssignment5
                 int featureCounter = 0;
                 int exampleCounter = 0;
                 string line;
-                string value1;
-                string value2;
+                string value1 = "";
+                string value2 = "";
 
                 //open file and parse input
-                System.IO.StreamReader file = new System.IO.StreamReader(args[0]);
+                System.IO.StreamReader file = new System.IO.StreamReader(args[1]);
                 while ((line = file.ReadLine()) != null)
                 {
                     if (line.Length != 0 && line[0] != '/')
@@ -57,8 +58,8 @@ namespace AIAssignment5
                         lineCounter++;
                     }
                 }
-                
-                //DEBUG PURPOSES------------------------------------
+                /*
+                //DEBUGGING FOR FILE PARSING ------------------------------------
                 foreach (Individual i in individuals)
                 {
                     Console.WriteLine(i.value);
@@ -68,8 +69,11 @@ namespace AIAssignment5
                 {
                     Console.WriteLine(f.name);
                 }
-                //--------------------------------------------------
-                Console.WriteLine(lineCounter);
+                //---------------------------------------------------------------
+                */
+
+                //ID3 Decision Tree Generation
+                Tree tree = new Tree(individuals, features, value1, value2);
                 file.Close();
             }
             else
