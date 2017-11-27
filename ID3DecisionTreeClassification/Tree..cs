@@ -12,7 +12,9 @@ namespace ID3DecisionTreeClassification
         public TreeNode root;
         public string category1;
         public string category2;
+        public string errorMSG = "no training data";
         public int depth = 0;
+        public List<TreeNode> treeList = new List<TreeNode>();
 
         /* ID3 (examples, attributes)
         *  if all examples in same category then
@@ -36,34 +38,74 @@ namespace ID3DecisionTreeClassification
             printTree(root);
         }
 
+
+        public void classify(List<Individual> individualsTest, List<Feature> featuresTest)
+        {
+            int correctCount = 0;
+            int miss = 0;
+            foreach (Individual i in individualsTest)
+            {
+                string classify = findValue(i, featuresTest, root);
+                
+                if (classify == i.value)
+                {
+                    correctCount++;
+                } else
+                {
+                    miss++;
+                    Console.WriteLine(i.name);
+                }
+            }
+            Console.WriteLine("\nCorrectly Classified Number: " + correctCount);
+            Console.WriteLine("Missclassified Number: " + miss);
+            Console.WriteLine("Percent Missclassified: " + 100*((double)miss / (double)(correctCount + miss)));
+        }
+
+        private string findValue(Individual i, List<Feature> featuresTest, TreeNode node)
+        {
+            string value = "";
+            if(node.value == category1)
+            {
+                return category1;
+            } else if (node.value == category2)
+            {
+                return category2;
+            } else if(node.value == errorMSG)
+            {
+                return errorMSG;
+            }
+            for(int j = 0; j < node.connections.Count; j++)
+            {
+                if (i.attributes.Contains<string>(node.connections[j].value))
+                {
+                    value = findValue(i, featuresTest, node.connections[j].connections[0]);
+                }
+            }
+            return value;
+        }
+
         private TreeNode ID3(List<Individual> examples, List<Feature> attributes, Feature best)
         {
+            if (examples.Count == 0)
+                return new TreeNode(errorMSG);
             string category = sameCategory(examples);
             if (category != null)
             {
                 return new TreeNode(category);
             }
-            bool allLocked = checkLocks(attributes);
-            if (allLocked)
+            if (attributes.Count == 0)
             {
                 return new TreeNode(commonCategory(examples));
             }
             Feature bestAttribute = chooseAttribute(examples, attributes);
-            bestAttribute.locked = true;
+            List<Feature> copyList = new List<Feature>(attributes);
+            copyList.Remove(bestAttribute);
             TreeNode tree = new TreeNode(bestAttribute.name);
             for (int i = 0; i < bestAttribute.attributeList.Length; i++)
             {
-                if(best == null && i != 0)
-                {
-                    for (int j = 0; j < attributes.Count; j++)
-                    {
-                        if(attributes[j] != bestAttribute)
-                            attributes[j].locked = false;
-                    }
-                }
                 List<Individual> subsetExamples = subset(examples, bestAttribute.attributeList[i]);
                 TreeNode connector = new TreeNode(bestAttribute.attributeList[i]);
-                TreeNode subtree = ID3(subsetExamples, attributes, bestAttribute);
+                TreeNode subtree = ID3(subsetExamples, copyList, bestAttribute);
                 subtree.parent = connector;
                 tree.connections.Add(connector);
                 connector.parent = tree;
@@ -89,18 +131,9 @@ namespace ID3DecisionTreeClassification
             {
                 if (Array.Exists<string>(examples[i].attributes, element => element == attributeSubset))
                 {
-                    /*
-                    for(int j = 0; j < examples[i].attributes.Length; j++)
-                    {
-                        if(examples[i].attributes[j] == attributeSubset)
-                        {
-                          // examples[i].attributes[j] = null;
-                        }
-                    }*/
                     sub.Add(examples[i]);
                 }
             }
-            //return list of individuals who are in that attribute subset and set it to null
             return sub;
         }
 
@@ -149,6 +182,7 @@ namespace ID3DecisionTreeClassification
             }
             return bestFeature;
         }
+
 
         private double D(double count1, double count2)
         {
@@ -200,10 +234,11 @@ namespace ID3DecisionTreeClassification
         {
             for(int i = 0; i < depth/2; i++)
             {
-                Console.Write("    ");
+                Console.Write("      ");
             }
             Console.Write(node.value + "\n");
             node.discovered = true;
+            treeList.Add(node);
             foreach (TreeNode t in node.connections)
             {
                 if (!t.discovered)
